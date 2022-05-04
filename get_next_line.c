@@ -33,62 +33,71 @@ RECUERDA PROBAR EN COMPOSE... TE FALTA MUY POCO!
 	// realiza una copia del buffer hasta que consiga el '\n'
 	// retorna al puntero del buffer original hasta esa posición
 	// la copia del buffer es la que voy a meter en la línea
-	// Si consigo un '\n', entonces lo 
+	// Si consigo un '\n', entonces lo
 	// No tengo que modificar el buffer, sino la línea... La línea tomará todo el buffer
-	// la línea final 
+	// la línea final
 
 /**
  * @brief Lee un 'fd' y guarda lo leído en un buffer.
- * 
+ * Reservo memoria con calloc,
  * @param fd El file descriptor que se va a leer.
  * @return El buffer creado, que contiene lo leído del 'fd'.
  */
 static char	*read_file(int fd)
 {
 	char	*buffer;
+	int		reading;
 
 	if (fd < 0 && BUFFER_SIZE <= 0)
 		return (NULL);
-	buffer = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
-	read(fd, buffer, BUFFER_SIZE);
+	//	Reservo memoria con malloc, porque así no hago bucles de más.
+	buffer = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
+	if (!buffer)
+		return (NULL);
+	//	Leo el fd y guardo lo leído en el buffer. Además guardo el retorno en
+	//	una variable (reading).
+	reading = read(fd, buffer, BUFFER_SIZE);
+	// Si la lectura salió mal, libero al buffer y retorno NULL.
+	if (reading == -1)
+	{
+		free(buffer);
+		return (NULL);
+	}
+	//	Ubico al buffer en la última posición, y lo aseguro con un nul.
+	*(buffer + BUFFER_SIZE) = '\0';
 	return (buffer);
 }
 
 /*	Función que se encarga de procesar la línea para extraer la línea y devolver
 	el remainder, si aplica. */
-static void	extract_line(char **remainder, char **line)
-{
-	char	*rem;
+// static void	extract_line(char **remainder, char **line)
+// {
+// 	char	*rem;
 
-	rem = *remainder;
-	while (*rem && *rem != '\n')
-		rem++;
-	*remainder = ft_substr(*remainder, 0, rem - *remainder);
-	*line = ft_substr(*line, 0, rem - *remainder);
-}
+// 	rem = *remainder;
+// 	while (*rem && *rem != '\n')
+// 		rem++;
+// 	*remainder = ft_substr(*remainder, 0, rem - *remainder);
+// 	*line = ft_substr(*line, 0, rem - *remainder);
+// }
 
 /* Función que se encarga de crear la línea según el buffer */
 /* El remainder es lo que queda despues del salto de línea, incluyendo al salto
 	por lo que el inicio de la siguiente línea, será remainder + 1*/
 static char	*compose_line(char **buffer, char **line, int fd)
 {
-	int		i;
 	char	*line_remainder;
-	char	*new_line;
+	// char	*unfinished_line;
 
-	i = 0;
 	*buffer = read_file(fd);
 	line_remainder = *line;
-	new_line = *line;
 	ft_strlcat(*line, *buffer, ft_strlen(*line) + BUFFER_SIZE + 1);
-	// while (*line_remainder && *line_remainder != '\n')
-	// 	line_remainder++;
-	// *line = ft_substr(*line, 0, line_remainder - *line);
-	extract_line(&line_remainder, &new_line);
+	while (*line_remainder && *line_remainder != '\n')
+		line_remainder++;
+	*line = ft_substr(*line, 0, line_remainder - *line);
+	// extract_line(line_remainder, new_line);
 	printf("rem -> :%s:\n", line_remainder);
-	printf("line -> :%s:\n", new_line);
 	printf("line_remainder in compose: :%s:\n", line_remainder + 1);
-	printf("line in compose: :%s:\n", *line);
 	return (line_remainder + 1);
 }
 
@@ -97,8 +106,13 @@ char	*get_next_line(int fd)
 	char		*buffer;
 	static char	*line;
 
-	line = read_file(fd);
+	line = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
 	compose_line(&buffer, &line, fd);
+	while (*line)
+	{
+		if (*line == '\n')
+	}
+	printf("line: :%s:\n", line);
 	return (line);
 }
 
