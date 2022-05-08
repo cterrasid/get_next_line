@@ -6,7 +6,7 @@
 /*   By: cterrasi <cterrasi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 14:34:00 by cterrasi          #+#    #+#             */
-/*   Updated: 2022/05/08 20:06:28 by cterrasi         ###   ########.fr       */
+/*   Updated: 2022/05/08 22:09:52 by cterrasi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,23 +34,28 @@ static int	compose_line(int fd, char **collector)
 	if (!line)
 		return (0);
 	*collector = ft_strdup(buffer);
-	ft_strlcat(line, *collector, bytes_read + ft_strlen(*collector) + 1);
-	printf("buffer: %s\n", buffer);
-	printf("line: %s\n", line);
-	printf("bytes_read: %d\n", bytes_read);
+	ft_strlcat(line, buffer, bytes_read + ft_strlen(*collector) + 1);
+	*collector = line;
+	free(*collector);
 	return (bytes_read);
 }
 
 char	*get_next_line(int fd)
 {
 	int			i;
+	char		*line;
 	static char	*collector;
 
 	i = 0;
+	line = collector;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (0);
 	compose_line(fd, &collector);
+	// while (*collector != '\n')
+	// {
+	// 	collector++;
+	// }
 	compose_line(fd, &collector);
-	printf("collector: %s\n", collector);
+	printf("line: %s\n", line);
 	return (collector);
 }
