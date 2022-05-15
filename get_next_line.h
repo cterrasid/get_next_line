@@ -6,7 +6,7 @@
 /*   By: cterrasi <cterrasi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 14:34:04 by cterrasi          #+#    #+#             */
-/*   Updated: 2022/05/01 08:27:06 by cterrasi         ###   ########.fr       */
+/*   Updated: 2022/05/06 16:45:54 by cterrasi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,24 +23,10 @@
 #  define BUFFER_SIZE 1
 # endif /* BUFFER_SIZE */
 
-/*	... MAIN FUNCTION ...	*/
-char	*get_next_line(int fd);
-
-/*	... UTILS ...	*/
 /**
 * @brief Calculates the length of a given string 's'.
 */
 size_t	ft_strlen(const char *s);
-
-/**
-* @brief Allocates memory for an array of 'count' elements (with 'size'
-* bytes each).
-* Every position of memory is set to zero ('0').
-* @param count Number of elements of the array to allocate.
-* @param size Size in bytes of each element to allocate.
-* @returns Pointer to the allocated memory.
-*/
-void	*ft_calloc(size_t count, size_t size);
 
 /**
 * @brief Duplicates the string 's'. The memory obtained
@@ -69,5 +55,16 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 * @returns Pointer to the obtained substring.
 */
 char	*ft_substr(const char *str, unsigned int start, size_t max_len);
+
+/**
+* @brief Copies a string 'src' to a destination buffer 'dst'.
+* @param dst The string where will be copied 'size - 1' bytes of 'src'.
+* @param src The string to copy in 'dst'.
+* @param size The bytes of 'src' to copy in 'dst', including the NUL.
+* @returns The length of 'src'.
+*/
+size_t	ft_strlcpy(char *dst, const char *src, size_t size);
+
+char	*get_next_line(int fd);
 
 #endif /* GET_NEXT_LINE_H */
