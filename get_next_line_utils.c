@@ -6,7 +6,7 @@
 /*   By: cterrasi <cterrasi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 14:34:11 by cterrasi          #+#    #+#             */
-/*   Updated: 2022/05/02 16:39:02 by cterrasi         ###   ########.fr       */
+/*   Updated: 2022/05/06 16:45:57 by cterrasi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,6 @@ size_t	ft_strlen(const char *s)
 	while (*s)
 		s++;
 	return (s - s2);
-}
-
-void	*ft_calloc(size_t count, size_t size)
-{
-	unsigned char	*p;
-	size_t			i;
-
-	p = malloc(count * size);
-	if (p && (size <= UINT_MAX || count <= UINT_MAX))
-	{
-		i = 0;
-		while (i < count * size)
-			*(p + i++) = '\0';
-		return (p);
-	}
-	return (NULL);
 }
 
 char	*ft_strdup(const char *s)
@@ -100,4 +84,20 @@ char	*ft_substr(const char *str, unsigned int start, size_t max_len)
 		substring[i++] = str[start++];
 	substring[i] = '\0';
 	return (substring);
+}
+
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+{
+	size_t	slen;
+
+	slen = ft_strlen(src);
+	if (size < 1)
+		return (slen);
+	while (*src && size - 1)
+	{
+		*dst++ = *src++;
+		size--;
+	}
+	*dst = '\0';
+	return (slen);
 }
