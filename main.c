@@ -8,6 +8,7 @@ int	main(void)
 	if (fd == -1)
 		printf("ERROR\n");
 	printf("result: %s\n", get_next_line(fd));
+	printf("result2: %s\n", get_next_line(fd));
 	close(fd);
 	return (0);
 }
