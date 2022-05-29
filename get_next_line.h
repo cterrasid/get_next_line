@@ -6,7 +6,7 @@
 /*   By: cterrasi <cterrasi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 14:34:04 by cterrasi          #+#    #+#             */
-/*   Updated: 2022/05/06 16:45:54 by cterrasi         ###   ########.fr       */
+/*   Updated: 2022/05/29 17:05:32 by cterrasi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,24 +29,6 @@
 size_t	ft_strlen(const char *s);
 
 /**
-* @brief Duplicates the string 's'. The memory obtained
-* is done dynamically using malloc().
-* @returns Pointer to a null-terminated byte string, which is a duplicate
-* of the string pointed by 's'.
-*/
-char	*ft_strdup(const char *s);
-
-/**
-* @brief Appends at most 'size - strlen(dst) - 1' bytes of 'src' to 'dst'.
-* @param dst The destination buffer.
-* @param src The string to append to 'dst'.
-* @param dstsize The size of the final string, including the NUL.
-* @returns The combined length of 'src' and 'dst' (not counting their
-* terminating null characters).
-*/
-size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
-
-/**
 * @brief Allocates memory with malloc(), to return a new string based on 's'.
 * The new string begins at 'start' and has a max length of 'len'.
 * @param str The reference string to form the substring.
@@ -57,14 +39,24 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 char	*ft_substr(const char *str, unsigned int start, size_t max_len);
 
 /**
-* @brief Copies a string 'src' to a destination buffer 'dst'.
-* @param dst The string where will be copied 'size - 1' bytes of 'src'.
-* @param src The string to copy in 'dst'.
-* @param size The bytes of 'src' to copy in 'dst', including the NUL.
-* @returns The length of 'src'.
+* @brief Allocates memory with malloc() to create a new string,
+* based on the join	of 's1' and 's2'.
+* @param s1	The prefix string.
+* @param s2	The sufix string.
+* @returns Pointer to the string created from the join of 's1' and 's2'.
 */
-size_t	ft_strlcpy(char *dst, const char *src, size_t size);
+char	*ft_strjoin(char *s1, char *s2);
 
+/**
+* @brief Copies 'n' bytes of the memory area pointed by 'src',
+* to the memory area pointed by 'dest'.
+* @param dst Memory area where will be copied 'n' bytes of 'src'.
+* @param src Memory area from where will be copied 'n' bytes
+* to 'dst'.
+* @param n Bytes of 'src' which will be copied to 'dst'.
+* @returns Pointer to 'dst'.
+*/
+void	*ft_memcpy(void *dest, const void *src, size_t n);
 char	*get_next_line(int fd);
 
 #endif /* GET_NEXT_LINE_H */
