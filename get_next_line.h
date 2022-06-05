@@ -6,7 +6,7 @@
 /*   By: cterrasi <cterrasi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 14:34:04 by cterrasi          #+#    #+#             */
-/*   Updated: 2022/05/29 17:05:32 by cterrasi         ###   ########.fr       */
+/*   Updated: 2022/06/04 21:56:46 by cterrasi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ char	*ft_strjoin(char *s1, char *s2);
 * @returns Pointer to 'dst'.
 */
 void	*ft_memcpy(void *dest, const void *src, size_t n);
+char	*ft_strchr(const char *str, int ch);
 char	*get_next_line(int fd);
 
 #endif /* GET_NEXT_LINE_H */
