@@ -6,56 +6,86 @@
 /*   By: cterrasi <cterrasi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 21:21:24 by cterrasi          #+#    #+#             */
-/*   Updated: 2022/06/05 19:39:08 by cterrasi         ###   ########.fr       */
+/*   Updated: 2022/07/09 18:30:40 by cterrasi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static void	prepare_next_line(char **collector)
+static char	*prepare_next_line(char *collector)
 {
-	char	*str;
-	char	*aux;
+	char	*next_line;
+	int		i;
+	int		j;
 
-	aux = *collector;
-	while (**collector != '\n')
-		(*collector)++;
-	str = malloc(sizeof(char) * (*collector - aux) + 1);
-	if (str)
+	i = 0;
+	j = 0;
+	while (collector[i] && collector[i] != '\n')
+		i++;
+	if (!collector[i])
 	{
-		(*collector)++;
-		aux = *collector;
-		ft_memcpy(str, *collector, (*collector - aux));
-		str[*collector - aux] = '\0';
-		*collector = str;
+		free(collector);
+		return (NULL);
 	}
+	next_line = malloc(sizeof(char) * (ft_strlen(collector) - i + 1));
+	if (next_line)
+	{
+		i++;
+		while (collector[i])
+			next_line[j++] = collector[i++];
+		*(next_line + j) = '\0';
+		free(collector);
+		return (next_line);
+	}
+	return (NULL);
 }
 
-static void	extract_line(char **collector, char **line)
+static char	*extract_line(char *collector)
 {
-	char	*str;
+	char	*line;
+	int		i;
 
-	str = *collector;
-	while (*str != '\n')
-		str++;
-	*line = ft_substr(*collector, 0, str - *collector);
-	*collector += (str - *collector);
+	i = 0;
+	if (!collector[i])
+		return (NULL);
+	while (collector[i] && collector[i] != '\n')
+		i++;
+	line = ft_substr(collector, 0, i + 1);
+	i = 0;
+	while (collector[i] && collector[i] != '\n')
+	{
+		line[i] = collector[i];
+		i++;
+	}
+	return (line);
 }
 
 static void	read_and_compose_line(int fd, char **collector)
 {
-	int		bytes_read;
 	char	*buffer;
+	char	*join;
+	int		bytes_read;
 
-	buffer = malloc(sizeof(char) * BUFFER_SIZE + 1);
-	if (buffer)
+	if (!*collector)
 	{
-		while (!ft_strchr(*collector, '\n'))
+		*collector = malloc(1);
+		**collector = '\0';
+	}
+	buffer = malloc(sizeof(char) * BUFFER_SIZE + 1);
+	if (buffer && *collector)
+	{
+		bytes_read = 1;
+		while (!ft_strchr(*collector, '\n') && bytes_read != 0)
 		{
 			bytes_read = read(fd, buffer, BUFFER_SIZE);
+			if (bytes_read == -1)
+				free(buffer);
 			*(buffer + bytes_read) = '\0';
-			*collector = ft_strjoin(*collector, buffer);
+			join = ft_strjoin(*collector, buffer);
+			free(*collector);
+			*collector = join;
 		}
+		free(buffer);
 	}
 }
 
@@ -64,12 +94,12 @@ char	*get_next_line(int fd)
 	static char	*collector;
 	char		*line;
 
-	if (fd < 1 || BUFFER_SIZE < 1)
-		return (0);
+	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, 0, 0) < 0)
+		return (NULL);
 	read_and_compose_line(fd, &collector);
 	if (!collector)
 		return (NULL);
-	extract_line(&collector, &line);
-	prepare_next_line(&collector);
+	line = extract_line(collector);
+	collector = prepare_next_line(collector);
 	return (line);
 }
