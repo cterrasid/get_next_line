@@ -6,22 +6,44 @@
 /*   By: cterrasi <cterrasi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 14:34:11 by cterrasi          #+#    #+#             */
-/*   Updated: 2022/06/04 21:58:56 by cterrasi         ###   ########.fr       */
+/*   Updated: 2022/07/09 18:03:34 by cterrasi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	const char	*s2;
+	int	i;
 
-	if (!s)
-		return (0);
-	s2 = s;
-	while (*s)
-		s++;
-	return (s - s2);
+	i = 0;
+	if ((dest == '\0' && src == '\0') || !n)
+		return (dest);
+	while (n--)
+	{
+		((unsigned char *)dest)[i] = ((unsigned char *)src)[i];
+		i++;
+	}
+	return (dest);
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	size_t	s1len;
+	size_t	s2len;
+	char	*str;
+
+	if (!s1 || !s2)
+		return (NULL);
+	s1len = ft_strlen(s1);
+	s2len = ft_strlen(s2);
+	str = malloc(sizeof(char) * (s1len + s2len + 1));
+	if (!str)
+		return (NULL);
+	ft_memcpy(str, s1, s1len);
+	ft_memcpy(str + s1len, s2, s2len);
+	str[s1len + s2len] = '\0';
+	return (str);
 }
 
 char	*ft_substr(const char *str, unsigned int start, size_t max_len)
@@ -64,41 +86,14 @@ char	*ft_strchr(const char *str, int ch)
 	return (NULL);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+size_t	ft_strlen(const char *s)
 {
-	size_t	s1len;
-	size_t	s2len;
-	char	*str;
+	const char	*s2;
 
-	if (!s1)
-	{
-		s1 = malloc(1 * sizeof(char));
-		*s1 = '\0';
-	}
-	if (!s1 || !s2)
-		return (NULL);
-	s1len = ft_strlen(s1);
-	s2len = ft_strlen(s2);
-	str = malloc(sizeof(char) * (s1len + s2len + 1));
-	if (!str)
-		return (NULL);
-	ft_memcpy(str, s1, s1len);
-	ft_memcpy(str + s1len, s2, s2len);
-	str[s1len + s2len] = '\0';
-	return (str);
-}
-
-void	*ft_memcpy(void *dest, const void *src, size_t n)
-{
-	int	i;
-
-	i = 0;
-	if ((dest == '\0' && src == '\0') || !n)
-		return (dest);
-	while (n--)
-	{
-		((unsigned char *)dest)[i] = ((unsigned char *)src)[i];
-		i++;
-	}
-	return (dest);
+	if (!s)
+		return (0);
+	s2 = s;
+	while (*s)
+		s++;
+	return (s - s2);
 }
